@@ -6,30 +6,23 @@ export default class HelloWorldScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.setBaseURL('https://labs.phaser.io')
-
-		this.load.image('sky', 'assets/skies/space3.png')
-		this.load.image('logo', 'assets/sprites/phaser3-logo.png')
-		this.load.image('red', 'assets/particles/red.png')
+		this.load.image('tilesheet', 'assets/Tileset.png')
+		this.load.tilemapTiledJSON('tilemap', 'assets/base.json')
 	}
 
 	create() {
-		this.add.image(400, 300, 'sky')
+		console.log(this.cache.tilemap)
+		// create the Tilemap
+		const map = this.make.tilemap({ key: 'tilemap' })
+		console.log(map)
 
-		const particles = this.add.particles('red')
+		// add the tileset image we are using
+		const tileset = map.addTilesetImage('base', 'tilesheet')
+		console.log(tileset)
+		
+		// create the layers we want in the right order
+		map.createLayer('Base', tileset)
 
-		const emitter = particles.createEmitter({
-			speed: 100,
-			scale: { start: 1, end: 0 },
-			blendMode: 'ADD',
-		})
-
-		const logo = this.physics.add.image(400, 100, 'logo')
-
-		logo.setVelocity(100, 200)
-		logo.setBounce(1, 1)
-		logo.setCollideWorldBounds(true)
-
-		emitter.startFollow(logo)
+		map.createLayer('Decoration', tileset)
 	}
 }
