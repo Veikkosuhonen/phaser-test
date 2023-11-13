@@ -29,14 +29,14 @@ export default class HelloWorldScene extends Phaser.Scene {
 		
 		this.player = this.physics.add.sprite(100, 100, 'charactersheet', 0);
 
-		const walkAnimation = this.anims.create({
+		this.anims.create({
 			key: 'walk',
 			frames: this.anims.generateFrameNumbers('charactersheet', { start: 36, end: 40 }),
 			frameRate: 10,
 			repeat: -1
 		});
 
-		const idleAnimation = this.anims.create({
+		this.anims.create({
 			key: 'idle',
 			frames: this.anims.generateFrameNumbers('charactersheet', { start: 12, end: 15 }),
 			frameRate: 10,
