@@ -4,6 +4,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 	keys: Phaser.Types.Input.Keyboard.CursorKeys|null = null;
 	player: Phaser.Physics.Arcade.Sprite|null = null;
 	isDead = false;
+	mapLayer: Phaser.Tilemaps.TilemapLayer|null = null;
 
 	constructor() {
 		super('hello-world')
@@ -24,15 +25,26 @@ export default class HelloWorldScene extends Phaser.Scene {
 		const tileset = map.addTilesetImage('base', 'tilesheet')
 
 		// create the layers we want in the right order
-		map.createLayer('Base', tileset)
+		map.setCollisionBetween(48, 51, true);
+		this.mapLayer = map.createLayer('Base', tileset)
+		/*this.mapLayer.renderDebug(this.add.graphics(), {
+			tileColor: null,
+			collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200),
+			faceColor: new Phaser.Display.Color(40, 39, 37, 255)
+		})*/
 
 		map.createLayer('Decoration', tileset)
+
 		
-		this.player = this.physics.add.sprite(100, 100, 'charactersheet', 0);
+		this.player = this.physics.add.sprite(300, 200, 'charactersheet', 0);
 		this.player.scale = 0.5;
 		this.player.setDamping(true);
-		this.player.setMaxVelocity(100);
-		this.player.setDrag(0.002);
+		this.player.setMaxVelocity(70);
+		this.player.setDrag(0.001);
+		this.player.setCollideWorldBounds(true);
+		this.player.body.setSize(20, 12, false);
+		this.player.body.setOffset(14, 40);
+		this.player.body.onCollide = true;
 
 		this.anims.create({
 			key: 'walk',
@@ -67,13 +79,16 @@ export default class HelloWorldScene extends Phaser.Scene {
 		this.keys = this.input.keyboard.createCursorKeys();
 
 		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-		this.cameras.main.setZoom(4);
+		this.cameras.main.setZoom(6);
         this.cameras.main.startFollow(this.player);
 	}
 
 	update() {
 		if (!this.player || !this.keys || this.isDead) return;
-	
+
+		this.physics.collide(this.player, this.mapLayer!);
+
+
 		let isRunning = false;
 		const isRolling = this.player.anims.currentAnim.key === 'roll' && !this.player.anims.currentFrame.isLast;
 		if (isRolling) {
