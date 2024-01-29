@@ -9,7 +9,7 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^5.40.0",
+		"@typescript-eslint/eslint-plugin": "^6.19.1",
 		"@typescript-eslint/parser": "^5.40.0",
 		"vite-plugin-favicons-inject": "^2.2.0",
 		"eslint": "^8.25.0",
